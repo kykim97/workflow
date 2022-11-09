@@ -1,0 +1,82 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: Workflow
+          uri: http://localhost:8081
+          predicates:
+            - Path=/workflowHists/**, /workflowHists/**, /rawData/**
+        - id: Preprocess
+          uri: http://localhost:8082
+          predicates:
+            - Path=/processedData/**, /processedData/**, /rawData/**, /rawData/**
+        - id: Inference
+          uri: http://localhost:8083
+          predicates:
+            - Path=/inferenceResults/**, /inferenceResults/**, /processedData/**, /processedData/**
+        - id: Raw Data
+          uri: http://localhost:8084
+          predicates:
+            - Path=/rawData/**, /rawData/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: Workflow
+          uri: http://workflow:8080
+          predicates:
+            - Path=/workflowHists/**, /workflowHists/**, /rawData/**
+        - id: Preprocess
+          uri: http://preprocess:8080
+          predicates:
+            - Path=/processedData/**, /processedData/**, /rawData/**, /rawData/**
+        - id: Inference
+          uri: http://inference:8080
+          predicates:
+            - Path=/inferenceResults/**, /inferenceResults/**, /processedData/**, /processedData/**
+        - id: Raw Data
+          uri: http://rawData:8080
+          predicates:
+            - Path=/rawData/**, /rawData/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080

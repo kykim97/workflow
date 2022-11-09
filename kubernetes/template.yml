@@ -1,0 +1,228 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Workflow
+  labels:
+    app: Workflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Workflow
+  template:
+    metadata:
+      labels:
+        app: Workflow
+    spec:
+      containers:
+        - name: Workflow
+          image: username/Workflow:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Preprocess
+  labels:
+    app: Preprocess
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Preprocess
+  template:
+    metadata:
+      labels:
+        app: Preprocess
+    spec:
+      containers:
+        - name: Preprocess
+          image: username/Preprocess:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Inference
+  labels:
+    app: Inference
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Inference
+  template:
+    metadata:
+      labels:
+        app: Inference
+    spec:
+      containers:
+        - name: Inference
+          image: username/Inference:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Raw Data
+  labels:
+    app: Raw Data
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Raw Data
+  template:
+    metadata:
+      labels:
+        app: Raw Data
+    spec:
+      containers:
+        - name: Raw Data
+          image: username/Raw Data:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Workflow
+  labels:
+    app: Workflow
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Workflow
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Preprocess
+  labels:
+    app: Preprocess
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Preprocess
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Inference
+  labels:
+    app: Inference
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Inference
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Raw Data
+  labels:
+    app: Raw Data
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Raw Data
+
